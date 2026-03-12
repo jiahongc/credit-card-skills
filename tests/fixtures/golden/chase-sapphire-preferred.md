@@ -1,4 +1,4 @@
-# Card Dossier: Chase Sapphire Preferred
+# Credit Card Info: Chase Sapphire Preferred
 
 ## Card Identity
 

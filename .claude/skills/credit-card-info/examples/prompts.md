@@ -3,13 +3,13 @@
 ## Direct Invocation
 
 ```text
-/credit-card-dossier Chase Sapphire Preferred
+/credit-card-info Chase Sapphire Preferred
 ```
 
 ## With Clarification Request
 
 ```text
-/credit-card-dossier Hilton Honors American Express Surpass Card
+/credit-card-info Hilton Honors American Express Surpass Card
 Focus on hotel perks and statement credits, but still return the full dossier format.
 ```
 

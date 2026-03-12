@@ -1,11 +1,11 @@
 ---
-name: credit-card-dossier
-description: Research a single major-US credit card and return a structured dossier with the best public signup offer, benefits, usage limits, and source notes. Use when the user names a credit card and wants current issuer-backed details plus approved secondary-source validation.
+name: credit-card-info
+description: Research a single major-US credit card and return structured credit card information with the best public signup offer, benefits, usage limits, and source notes. Use when the user names a credit card and wants current issuer-backed details plus approved secondary-source validation.
 argument-hint: [card name]
 allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
 ---
 
-# Credit Card Dossier
+# Credit Card Info
 
 ## Quick Start
 
@@ -14,14 +14,14 @@ Use this skill when the user provides a single credit card name and wants a reli
 Input example:
 
 ```text
-/credit-card-dossier Chase Sapphire Preferred
+/credit-card-info Chase Sapphire Preferred
 ```
 
 Primary objective:
 
 1. Identify the exact card variant.
 2. Research approved sources only.
-3. Normalize the findings into a fixed dossier format.
+3. Normalize the findings into a fixed credit card info format.
 4. Surface uncertainty clearly when facts conflict or are missing.
 
 For source rules, see [source-policy.yaml](source-policy.yaml).
@@ -55,7 +55,7 @@ For output normalization, see [normalization-rules.md](normalization-rules.md).
   - call out the conflict in `sources / confidence notes`
 - If a detail cannot be confirmed, mark it `unconfirmed` rather than guessing.
 
-### Step 4: Return The Dossier
+### Step 4: Return The Credit Card Info
 
 Return both:
 
@@ -64,7 +64,7 @@ Return both:
 
 Required markdown sections, in this order:
 
-1. `# Card Dossier: <card name>`
+1. `# Credit Card Info: <card name>`
 2. `## Card Identity`
 3. `## Best Public Signup Offer`
 4. `## Earning Categories`
@@ -118,7 +118,7 @@ Each benefits collection should be a list of objects, not a prose blob.
 ## Example Skeleton
 
 ```markdown
-# Card Dossier: Example Card
+# Credit Card Info: Example Card
 
 ## Card Identity
 ...

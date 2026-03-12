@@ -2,7 +2,7 @@
 
 ## Goal
 
-Convert raw research notes into a consistent dossier for one major-US credit card.
+Convert raw research notes into a consistent credit card info report for one major-US credit card.
 
 ## Field Definitions
 
@@ -85,4 +85,4 @@ Include any frequency or cap information that materially limits a benefit, inclu
 - rental coverage exclusions
 - travel protection coverage caps or trip-count restrictions
 
-If the cap is embedded inside another category, duplicate the limit in `usage_limits` so the final dossier has one dedicated place for all practical constraints.
+If the cap is embedded inside another category, duplicate the limit in `usage_limits` so the final report has one dedicated place for all practical constraints.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a credit card dossier markdown response."""
+"""Validate a credit card info markdown response."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ except ImportError as exc:  # pragma: no cover
 
 
 REQUIRED_SECTIONS = [
-    "# Card Dossier:",
+    "# Credit Card Info:",
     "## Card Identity",
     "## Best Public Signup Offer",
     "## Earning Categories",
@@ -96,7 +96,7 @@ def validate_yaml_data(data: dict) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("path", type=Path, help="Path to a markdown dossier file")
+    parser.add_argument("path", type=Path, help="Path to a markdown credit card info file")
     args = parser.parse_args()
 
     content = args.path.read_text(encoding="utf-8")

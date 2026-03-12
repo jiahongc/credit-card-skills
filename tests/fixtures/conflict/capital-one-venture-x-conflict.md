@@ -1,4 +1,4 @@
-# Card Dossier: Capital One Venture X Rewards Credit Card
+# Credit Card Info: Capital One Venture X Rewards Credit Card
 
 ## Card Identity
 

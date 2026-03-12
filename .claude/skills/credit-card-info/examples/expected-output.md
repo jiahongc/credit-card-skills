@@ -2,7 +2,7 @@
 
 This is a minimal example to illustrate the contract, not live card data.
 
-# Card Dossier: Example Rewards Card
+# Credit Card Info: Example Rewards Card
 
 ## Card Identity
 
