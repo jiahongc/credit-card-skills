@@ -1,0 +1,10 @@
+{
+  "name": "credit-card-skills",
+  "description": "Credit card research command suite for major US cards. Provides /card-full, /card-rate, /card-transfer, /card-credits, /card-news, /card-compare, /card-value, and /card-wallet commands with shared sourcing rules and compact output.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Jiahong Chen"
+  },
+  "repository": "https://github.com/jiahongc/credit-card-info",
+  "license": "MIT"
+}

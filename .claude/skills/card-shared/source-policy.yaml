@@ -152,7 +152,7 @@ disallowed_sources:
 
 selection_rules:
   - Prefer issuer pages for benefits, terms, and issuer-specific credits.
-  - Use the `sources` list above as the preferred top-20 secondary-source allowlist for current article and guide discovery.
+  - Use the `sources` list above as the preferred secondary-source allowlist for current article and guide discovery.
   - Prefer the strongest publicly available and clearly live offer among approved sources.
   - Do not use a secondary source when the issuer page already resolves the fact cleanly unless validating a better public offer.
   - When a source is stale or undated, lower confidence or omit the claim.
