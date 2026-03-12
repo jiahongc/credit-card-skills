@@ -36,46 +36,53 @@ The repo ships with both `.claude/skills/` and `.agents/skills/` (symlinked) so 
 
 ## Install
 
+### One-liner (easiest)
+
+Run from your project root. Auto-detects Claude Code (`.claude/`) and Codex (`.agents/`) and installs into the right place:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/jiahongc/credit-card-skills/main/install.sh)
+```
+
+Target a specific agent with a flag:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/jiahongc/credit-card-skills/main/install.sh) --claude
+bash <(curl -fsSL https://raw.githubusercontent.com/jiahongchen/credit-card-skills/main/install.sh) --codex
+bash <(curl -fsSL https://raw.githubusercontent.com/jiahongc/credit-card-skills/main/install.sh) --all
+```
+
 ### Claude Code — as a plugin
 
-```bash
-# Load directly (development/testing)
-claude --plugin-dir /path/to/credit-card-skills
+Load without installing (development/testing):
 
-# Or install from a marketplace (if published)
-# /plugin install credit-card-skills
+```bash
+claude --plugin-dir /path/to/credit-card-skills
 ```
 
-Skills are namespaced when loaded as a plugin: `/credit-card-skills:card-full`, `/credit-card-skills:card-compare`, etc.
+Skills are namespaced when loaded as a plugin: `/credit-card-skills:card-full`, etc.
 
-### Claude Code — standalone project skills
+### Manual copy
 
 ```bash
+# Claude Code
 mkdir -p .claude/skills
 cp -R /path/to/credit-card-skills/.claude/skills/card-* .claude/skills/
-```
 
-Skills are available without a namespace: `/card-full`, `/card-compare`, etc.
-
-### OpenAI Codex
-
-```bash
+# OpenAI Codex
 mkdir -p .agents/skills
-cp -R /path/to/credit-card-skills/.agents/skills/card-* .agents/skills/
+cp -R /path/to/credit-card-skills/.claude/skills/card-* .agents/skills/
 ```
-
-Codex discovers skills automatically. Invoke with `/skills` or let Codex match them implicitly based on the task description.
 
 ### Other Agent Skills-compatible agents
 
 Copy the skill directories into your agent's skill location:
 
 ```bash
-# Generic — adjust the target path for your agent
 cp -R /path/to/credit-card-skills/.claude/skills/card-* <your-agent-skills-dir>/
 ```
 
-Each skill is a self-contained directory with a `SKILL.md` entrypoint and optional supporting files (scripts, references, examples).
+Each skill is a self-contained directory with a `SKILL.md` entrypoint and optional supporting files.
 
 ## Output Style
 
