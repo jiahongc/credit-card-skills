@@ -38,6 +38,7 @@ For output normalization, see [normalization-rules.md](normalization-rules.md).
 ### Step 2: Gather Approved Sources
 
 - Start with issuer domains listed in [source-policy.yaml](source-policy.yaml).
+- Use the curated top-20 secondary-source URL list in [source-policy.yaml](source-policy.yaml) before considering any other non-issuer source.
 - Use approved secondary domains only when:
   - searching for the best public signup offer
   - filling a detail the issuer site does not state clearly
