@@ -1,164 +1,220 @@
-# Credit Card Skills
+# 💳 Credit Card Skills
 
-Agent Skills command suite for researching major-US credit cards. Works with **Claude Code**, **OpenAI Codex**, and any agent that supports the [Agent Skills](https://agentskills.io) open standard.
+> Research any major US credit card in ~2 minutes — earning rates, transfer partners, credits, news, comparisons, and value estimates. Works with Claude Code, OpenAI Codex, Cursor, Gemini CLI, and any [Agent Skills](https://agentskills.io)-compatible tool.
 
-## Commands
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4f46e5?style=flat-square)](https://agentskills.io)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97706?style=flat-square)](https://code.claude.com)
+[![OpenAI Codex](https://img.shields.io/badge/OpenAI%20Codex-ready-10a37f?style=flat-square)](https://developers.openai.com/codex)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gray?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue?style=flat-square)](.claude-plugin/plugin.json)
 
-### Single-Card Research
-
-- `/card-full [card name]` - compact full card report: fees, offer, earnings, redemption, credits, benefits, protections, mechanics, eligibility, strategy
-- `/card-transfer [card name]` - numbered transfer partner list with ratios, timing, and restrictions
-- `/card-rate [card name]` - earning rates by category with caps and exclusions
-- `/card-news [card name]` - numbered recent-updates list from the last 3 months
-- `/card-credits [card name]` - numbered credits list with amount, cadence, trigger, and restrictions
-
-### Multi-Card & Analytical
-
-- `/card-compare [card A] vs [card B]` - side-by-side comparison across fees, earning rates, credits, transfer partners, and key benefits
-- `/card-value [card name] [optional spend breakdown]` - first-year value estimate: welcome bonus + earn + credits - annual fee
-- `/card-wallet [card1], [card2], ...` - multi-card wallet audit for overlap, gaps, and total annual cost
-
-All commands return compact markdown with emoji section headings and numbered lists. YAML is an internal contract only — it does not appear in user-facing output.
-
-## Compatibility
-
-These skills follow the [Agent Skills](https://agentskills.io) open standard (`SKILL.md` format with YAML frontmatter). They work with any compatible agent:
-
-| Agent | Skill Location | Install Method |
-|-------|---------------|----------------|
-| **Claude Code** | `.claude/skills/` | Plugin install, `--plugin-dir`, or manual copy |
-| **OpenAI Codex** | `.agents/skills/` | Clone repo into project or copy skills |
-| **Cursor** | `.cursor/skills/` | Copy skills directory |
-| **Gemini CLI** | `.gemini/skills/` | Copy skills directory |
-| **Other agents** | Varies | See [agentskills.io](https://agentskills.io) |
-
-The repo ships with both `.claude/skills/` and `.agents/skills/` (symlinked) so Claude Code and Codex work out of the box when the repo is cloned.
+---
 
 ## Install
 
-### One-liner (easiest)
-
-Run from your project root. Auto-detects Claude Code (`.claude/`) and Codex (`.agents/`) and installs into the right place:
+Run from your project root — auto-detects your agent:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/jiahongc/credit-card-skills/main/install.sh)
 ```
 
-Target a specific agent with a flag:
+<details>
+<summary>Target a specific agent</summary>
 
 ```bash
+# Claude Code only  → .claude/skills/
 bash <(curl -fsSL https://raw.githubusercontent.com/jiahongc/credit-card-skills/main/install.sh) --claude
-bash <(curl -fsSL https://raw.githubusercontent.com/jiahongchen/credit-card-skills/main/install.sh) --codex
+
+# OpenAI Codex only → .agents/skills/
+bash <(curl -fsSL https://raw.githubusercontent.com/jiahongc/credit-card-skills/main/install.sh) --codex
+
+# Both
 bash <(curl -fsSL https://raw.githubusercontent.com/jiahongc/credit-card-skills/main/install.sh) --all
 ```
 
-### Claude Code — as a plugin
+</details>
 
-Load without installing (development/testing):
+<details>
+<summary>Claude Code plugin (no install needed)</summary>
 
 ```bash
 claude --plugin-dir /path/to/credit-card-skills
 ```
 
-Skills are namespaced when loaded as a plugin: `/credit-card-skills:card-full`, etc.
+Skills load with a namespace: `/credit-card-skills:card-full`, etc.
 
-### Manual copy
+</details>
 
-```bash
-# Claude Code
-mkdir -p .claude/skills
-cp -R /path/to/credit-card-skills/.claude/skills/card-* .claude/skills/
+---
 
-# OpenAI Codex
-mkdir -p .agents/skills
-cp -R /path/to/credit-card-skills/.claude/skills/card-* .agents/skills/
-```
+## Commands
 
-### Other Agent Skills-compatible agents
+### Single-card
 
-Copy the skill directories into your agent's skill location:
+| Command | Description |
+|---------|-------------|
+| `/card-full [card]` | Full report — fees, offer, earnings, credits, benefits, protections, eligibility, strategy |
+| `/card-rate [card]` | Earning rates by category with caps and exclusions |
+| `/card-transfer [card]` | Transfer partners with ratios, timing, and restrictions |
+| `/card-credits [card]` | Credits with amount, cadence, trigger, and restrictions |
+| `/card-news [card]` | Material changes from the last 3 months |
 
-```bash
-cp -R /path/to/credit-card-skills/.claude/skills/card-* <your-agent-skills-dir>/
-```
+### Multi-card
 
-Each skill is a self-contained directory with a `SKILL.md` entrypoint and optional supporting files.
+| Command | Description |
+|---------|-------------|
+| `/card-compare [card A] vs [card B]` | Side-by-side: fees, earning rates, credits, transfer partners, benefits |
+| `/card-value [card] [optional spend]` | First-year value: welcome bonus + earn + credits − annual fee |
+| `/card-wallet [card1], [card2], ...` | Wallet audit: earning map, credit stack, overlaps, gaps |
 
-## Output Style
+---
 
-- One emoji per section heading
-- Numbered lists for credits, transfer partners, earning categories, and news items
-- No inline links or sources footer
-- No "Why It Matters" section
-- No visible YAML block
-- Card Identity section omitted when the match is confident
+## Example Output
 
-## Fast-Search Policy
-
-Commands target a ~2-minute budget:
-- 0-20s: normalize card name, resolve exact variant
-- 20-60s: fetch issuer product page and key terms/benefits pages
-- 60-110s: consult only 2-4 approved secondary sources if needed
-- 110-120s: finalize compact output; mark unresolved fields in confidence notes
-
-## Repo Structure
+<details>
+<summary><code>/card-rate Citi Double Cash</code></summary>
 
 ```
-credit-card-skills/
-├── .claude/skills/          # Authoritative skill source (Claude Code)
-│   ├── card-full/           # Full card report
-│   ├── card-rate/           # Earning rates
-│   ├── card-transfer/       # Transfer partners
-│   ├── card-credits/        # Statement credits
-│   ├── card-news/           # Recent news
-│   ├── card-compare/        # Side-by-side comparison
-│   ├── card-value/          # First-year value estimate
-│   ├── card-wallet/         # Multi-card wallet audit
-│   ├── card-identity/       # Shared card-name resolution (internal)
-│   └── card-shared/         # Shared policies, contracts, scripts
-├── .agents/skills/          # Symlinks for Codex compatibility
-├── .claude-plugin/          # Claude Code plugin manifest
-│   └── plugin.json
-├── skills/                  # Symlinks for plugin distribution
-├── tests/
-│   ├── fixtures/            # Golden, ambiguous, conflict, missing, recency
-│   └── run_all.sh           # Run all validators
-└── sample-outputs.md        # 10 example command outputs
+## 📊 Rate Summary
+
+- Base rate: 2% cash back on all purchases (1% when you buy + 1% as you pay)
+- Point currency: Citi ThankYou Points (1 point = 1 cent at standard redemption)
+- Key mechanic: second 1% earned only when you pay at least the minimum due on time
+
+## 📈 Earning Categories
+
+1. All purchases — 2% cash back (1% at purchase + 1% at payment)
+2. Hotels, car rentals, and attractions via Citi Travel portal — 5% total cash back
+3. Balance transfers, cash advances — 0%
+
+## 🚫 Caps And Exclusions
+
+- No annual or monthly cap on the base 2% earning rate
+- The second 1% requires paying at least the minimum due on time
+- The 5% travel rate applies only to the Citi Travel portal, not direct bookings
+
+## 📋 Confidence Notes
+
+- 5% Citi Travel portal rate confirmed via citi.com
+- ThankYou Points redemption value varies — as low as 0.8 cpp for Amazon
 ```
+
+</details>
+
+<details>
+<summary><code>/card-compare Amex Gold vs Chase Sapphire Preferred</code></summary>
+
+```
+## 💰 Fees
+
+|                        | Amex Gold | Chase Sapphire Preferred |
+|------------------------|-----------|--------------------------|
+| Annual fee             | $325      | $95                      |
+| Foreign transaction    | None      | None                     |
+| Net after credits      | ~$1/yr    | ~$45/yr                  |
+
+## 📈 Earning Rates
+
+| Category            | Amex Gold              | Chase Sapphire Preferred      |
+|---------------------|------------------------|-------------------------------|
+| Dining              | 4x MR                  | 3x UR                         |
+| U.S. supermarkets   | 4x MR (up to $25k/yr)  | 1x UR                         |
+| Travel (portal)     | 3x MR                  | 5x UR (Chase Travel)          |
+| Streaming           | 1x MR                  | 3x UR                         |
+
+## 🏆 Bottom Line
+
+| Dimension              | Winner                                        |
+|------------------------|-----------------------------------------------|
+| Lower annual fee       | Chase Sapphire Preferred ($95 vs $325)        |
+| Dining & groceries     | Amex Gold (4x vs 3x / 4x vs 1x)              |
+| Travel earn rate       | Chase Sapphire Preferred (5x portal)          |
+| Statement credits      | Amex Gold ($424 vs ~$50)                      |
+| Transfer partner reach | Amex Gold (20 partners vs 13)                 |
+| Hotel transfer quality | Chase Sapphire Preferred (World of Hyatt)     |
+| Travel protections     | Chase Sapphire Preferred                      |
+```
+
+</details>
+
+<details>
+<summary><code>/card-news Capital One Venture X</code></summary>
+
+```
+## 📅 News Window
+
+- 2025-12-12 to 2026-03-12 (90 days)
+
+## 📰 Recent Updates
+
+1. Elevated 100K welcome bonus expired (Jan 5, 2026) — reverted to 75K after $4K spend
+2. Lounge guest access removed (Feb 1, 2026) — guests now $45 each; free only after $75K/yr spend
+3. Authorized user lounge access now paid (Feb 1, 2026) — $125/yr per AU
+4. Priority Pass guest privileges revoked (Feb 1, 2026) — guests now $35 each
+5. Discover network migration begins for other Capital One cards — Venture X stays on Visa
+
+## 📝 Summary
+
+February 2026 brought significant lounge access downgrades. Core earning, annual fee,
+and travel credits remain unchanged.
+```
+
+</details>
+
+---
+
+## How It Works
+
+- **Issuer-first**: always fetches the card's official product page before secondary sources
+- **Fast**: targets a ~2-minute research budget per command
+- **Compact**: emoji section headings, numbered lists, no prose padding
+- **Honest**: unresolved fields are flagged in confidence notes, never invented
+- **15 approved sources**: mainstream finance + points-and-miles specialists (see [`source-policy.yaml`](.claude/skills/card-shared/source-policy.yaml))
+
+---
+
+## Compatibility
+
+Follows the [Agent Skills](https://agentskills.io) open standard — one `SKILL.md` format, works across agents.
+
+| Agent | Skill path |
+|-------|-----------|
+| Claude Code | `.claude/skills/` |
+| OpenAI Codex | `.agents/skills/` |
+| Cursor | `.cursor/skills/` |
+| Gemini CLI | `.gemini/skills/` |
+| Others | see [agentskills.io](https://agentskills.io) |
+
+---
 
 ## Shared Layer
 
-- `card-identity/SKILL.md` - centralized card-name resolution with abbreviation table and disambiguation logic
-- `card-shared/source-policy.yaml` - issuer domains, approved secondary sources, and fast-search policy
-- `card-shared/command-contracts.yaml` - required sections and YAML contracts for every command
-- `card-shared/section-definitions.md` - how `/card-full` maps the framework into compact sections
-- `card-shared/card-identity-rules.md` - variant identification and ambiguity handling rules
-- `card-shared/confidence-rules.md` - `confirmed`, `unconfirmed`, and `conflicting` rules
-- `card-shared/recency-rules.md` - 3-month news window and freshness expectations
-- `card-shared/normalization-rules.md` - shared formatting conventions
+All commands share a single research policy and output contracts:
+
+| File | Purpose |
+|------|---------|
+| [`source-policy.yaml`](.claude/skills/card-shared/source-policy.yaml) | Approved sources, issuer domains, fast-search budget |
+| [`command-contracts.yaml`](.claude/skills/card-shared/command-contracts.yaml) | Required sections and YAML schema per command |
+| [`card-identity-rules.md`](.claude/skills/card-shared/card-identity-rules.md) | Card-name resolution and variant disambiguation |
+| [`confidence-rules.md`](.claude/skills/card-shared/confidence-rules.md) | `confirmed` / `unconfirmed` / `conflicting` definitions |
+| [`recency-rules.md`](.claude/skills/card-shared/recency-rules.md) | 3-month news window rules |
+| [`normalization-rules.md`](.claude/skills/card-shared/normalization-rules.md) | Shared formatting conventions |
+
+---
 
 ## Validate Fixtures
-
-Run all validations at once:
 
 ```bash
 ./tests/run_all.sh
 ```
 
-Or validate individually:
+Runs 12 fixture validations + composition check + cross-fixture consistency check. See [`tests/`](tests/) for golden, ambiguous, conflict, missing, and recency fixture sets.
 
-```bash
-python3 .claude/skills/card-shared/scripts/validate_card_output.py --command card-full tests/fixtures/golden/card-full-chase-sapphire-preferred.md
-python3 .claude/skills/card-shared/scripts/validate_card_output.py --command card-compare tests/fixtures/golden/card-compare-csp-vs-venture-x.md
-python3 .claude/skills/card-shared/scripts/validate_card_output.py --command card-value tests/fixtures/golden/card-value-chase-sapphire-preferred.md
-python3 .claude/skills/card-shared/scripts/validate_card_output.py --command card-wallet tests/fixtures/golden/card-wallet-chase-amex-duo.md
-```
+---
 
 ## Notes
 
-- v2 targets compact, fast output with a ~2-minute search budget.
-- Major US issuers only.
-- Issuer pages are primary; the approved secondary source list is used only when needed and capped per command.
-- Commands stop once the contract is satisfied rather than continuing broad enrichment.
-- `/card-news` is intentionally independent from `/card-full` composition — news is time-windowed and conceptually separate.
-- Skills follow the [Agent Skills](https://agentskills.io) open standard for cross-agent compatibility.
+- Major US issuers only (Amex, Chase, Capital One, Citi, Bank of America, Discover, Wells Fargo)
+- `/card-news` is intentionally independent from `/card-full` — news is time-windowed and conceptually separate
+- YAML output contracts are internal only and never appear in user-facing output
+- See [`sample-outputs.md`](sample-outputs.md) for 10 real example outputs across all 8 commands
