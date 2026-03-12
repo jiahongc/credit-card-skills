@@ -1,7 +1,7 @@
 ---
 name: card-value
 description: Estimate first-year value for one major-US credit card given an optional spending breakdown. Returns welcome bonus + estimated earn + credits minus annual fee. Use when the user wants a quick value check.
-argument-hint: [card name] [optional spend breakdown]
+argument-hint: "[card name] [optional spend breakdown]"
 disable-model-invocation: true
 allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
 ---

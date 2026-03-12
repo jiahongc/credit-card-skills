@@ -1,7 +1,7 @@
 ---
 name: card-wallet
 description: Audit a multi-card wallet for overlap, gaps, and total annual cost. Given a list of cards the user holds, identifies redundant benefits, uncovered spend categories, and net fee burden. Use when the user wants to evaluate their full card lineup.
-argument-hint: [card1], [card2], ...
+argument-hint: "[card1], [card2], ..."
 disable-model-invocation: true
 allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
 ---

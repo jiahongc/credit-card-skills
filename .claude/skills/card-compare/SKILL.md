@@ -1,7 +1,7 @@
 ---
 name: card-compare
 description: Return a side-by-side comparison of two major-US credit cards across fees, earning rates, credits, transfer partners, and key benefits. Use when the user is deciding between two cards.
-argument-hint: [card A] vs [card B]
+argument-hint: "[card A] vs [card B]"
 disable-model-invocation: true
 allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
 ---
