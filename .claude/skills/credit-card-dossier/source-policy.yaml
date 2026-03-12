@@ -1,0 +1,60 @@
+version: 1
+scope:
+  geography: US
+  issuers:
+    - American Express
+    - Bank of America
+    - Capital One
+    - Chase
+    - Citi
+    - Discover
+    - Wells Fargo
+  rule: major-us-issuers-only
+
+issuer_domains:
+  American Express:
+    - americanexpress.com
+  Bank of America:
+    - bankofamerica.com
+  Capital One:
+    - capitalone.com
+  Chase:
+    - chase.com
+  Citi:
+    - citi.com
+    - citicards.com
+  Discover:
+    - discover.com
+  Wells Fargo:
+    - wellsfargo.com
+
+secondary_domains:
+  approved_for:
+    - best_public_signup_offer
+    - missing_benefit_details
+    - usage_limit_cross_check
+  domains:
+    - thepointsguy.com
+    - doctorofcredit.com
+    - frequentmiler.com
+    - onemileatatime.com
+    - nerdwallet.com
+    - bankrate.com
+    - uscreditcardguide.com
+
+disallowed_sources:
+  - reddit.com
+  - facebook.com
+  - instagram.com
+  - tiktok.com
+  - x.com
+  - youtube.com
+  - offer referral links
+  - targeted or mailed offers
+  - user-generated forums
+
+selection_rules:
+  - Prefer issuer pages for benefits, terms, and issuer-specific credits.
+  - Prefer the strongest publicly available and clearly live offer among approved sources.
+  - Do not use a secondary source when the issuer page already resolves the fact cleanly unless validating a better public offer.
+  - When a source is stale or undated, lower confidence or omit the claim.
