@@ -1,0 +1,42 @@
+---
+name: card-wallet
+description: Audit a multi-card wallet for overlap, gaps, and total annual cost. Given a list of cards the user holds, identifies redundant benefits, uncovered spend categories, and net fee burden. Use when the user wants to evaluate their full card lineup.
+argument-hint: [card1], [card2], ...
+disable-model-invocation: true
+allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
+---
+
+# Card Wallet
+
+## Goal
+
+Return a compact wallet audit for a set of cards the user holds.
+
+## Input Format
+
+The user provides a comma-separated list of card names:
+
+- `/card-wallet Chase Sapphire Preferred, Amex Gold, Citi Double Cash`
+
+## Workflow
+
+1. Parse the card list from the input (comma-separated).
+2. Resolve each card using [../card-identity/SKILL.md](../card-identity/SKILL.md). If any card is ambiguous, return a numbered choice list for that card and stop.
+3. Follow the fast-search policy in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml): research all cards, issuer pages first, up to 4 secondary sources total across all cards.
+4. For each card, collect: annual fee, top earning categories, statement credits, and key benefits.
+5. Identify: overlapping earning categories (where two cards cover the same spend at different rates), uncovered spend categories (common categories not covered at a bonus rate by any card), redundant benefits (same benefit on multiple cards), and total annual fee burden.
+6. Apply confidence handling from [../card-shared/confidence-rules.md](../card-shared/confidence-rules.md).
+7. Return compact markdown using the `card-wallet` contract in [../card-shared/command-contracts.yaml](../card-shared/command-contracts.yaml).
+8. YAML is internal only — do not include it in user-facing output.
+9. Do not show inline links, a sources footer, or a "Why It Matters" section.
+
+## Required Sections
+
+- `## 💰 Annual Cost`
+- `## 📈 Earning Map`
+- `## 🏷️ Credits Stack`
+- `## 🔁 Overlap`
+- `## 🕳️ Gaps`
+- `## 📋 Confidence Notes`
+
+Omit `## Card Identity` when all matches are confident. The Earning Map should show the best card for each major spend category. Overlap and Gaps should be concise numbered lists.

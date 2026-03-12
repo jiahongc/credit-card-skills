@@ -1,0 +1,206 @@
+version: 2
+scope:
+  geography: US
+  issuers:
+    - American Express
+    - Bank of America
+    - Capital One
+    - Chase
+    - Citi
+    - Discover
+    - Wells Fargo
+  rule: major-us-issuers-only
+
+issuer_domains:
+  American Express:
+    - americanexpress.com
+    - aboutamex.com
+  Bank of America:
+    - bankofamerica.com
+    - newsroom.bankofamerica.com
+  Capital One:
+    - capitalone.com
+    - capitalone.com/about
+  Chase:
+    - chase.com
+    - media.chase.com
+  Citi:
+    - citi.com
+    - citicards.com
+    - blog.citigroup.com
+  Discover:
+    - discover.com
+  Wells Fargo:
+    - wellsfargo.com
+    - newsroom.wf.com
+
+issuer_source_notes:
+  - Issuer blogs, newsrooms, and press release pages (e.g., media.chase.com, aboutamex.com) are treated as primary issuer sources, not secondary sources.
+  - Issuer social media accounts (Twitter/X, Instagram, YouTube) remain disallowed — use the issuer's own website or newsroom instead.
+  - Press releases from issuer newsrooms are valid for confirming product changes, new launches, and benefit updates.
+
+secondary_domains:
+  selected_on: 2026-03-12
+  methodology: traffic-informed shortlist of mainstream finance publishers plus news-oriented points-and-miles sites, ordered by combined reach, update frequency, and editorial depth rather than traffic alone
+  approved_for:
+    - best_public_signup_offer
+    - missing_benefit_details
+    - usage_limit_cross_check
+  sources:
+    - rank: 1
+      name: NerdWallet
+      domain: nerdwallet.com
+      url: https://www.nerdwallet.com
+      category: mainstream-finance
+    - rank: 2
+      name: Bankrate Credit Cards
+      domain: bankrate.com
+      url: https://www.bankrate.com/credit-cards/
+      category: mainstream-finance
+    - rank: 3
+      name: Credit Karma Credit Cards
+      domain: creditkarma.com
+      url: https://www.creditkarma.com/credit-cards
+      category: mainstream-finance
+    - rank: 4
+      name: CNBC Select Credit Cards
+      domain: cnbc.com
+      url: https://www.cnbc.com/select/credit-cards/
+      category: mainstream-finance
+    - rank: 5
+      name: Investopedia Credit Cards
+      domain: investopedia.com
+      url: https://www.investopedia.com/credit-cards-4689721
+      category: mainstream-finance
+    - rank: 6
+      name: WalletHub Credit Cards
+      domain: wallethub.com
+      url: https://wallethub.com/credit-cards
+      category: mainstream-finance
+    - rank: 7
+      name: LendingTree Credit Cards
+      domain: lendingtree.com
+      url: https://www.lendingtree.com/credit-cards/
+      category: mainstream-finance
+    - rank: 8
+      name: Business Insider Credit Cards
+      domain: businessinsider.com
+      url: https://www.businessinsider.com/personal-finance/credit-cards
+      category: mainstream-finance
+    - rank: 9
+      name: The Points Guy Credit Cards
+      domain: thepointsguy.com
+      url: https://thepointsguy.com/credit-cards/
+      category: points-and-miles
+    - rank: 10
+      name: Doctor of Credit
+      domain: doctorofcredit.com
+      url: https://www.doctorofcredit.com/credit-cards/
+      category: points-and-miles
+    - rank: 11
+      name: One Mile at a Time Guides
+      domain: onemileatatime.com
+      url: https://onemileatatime.com/guides/credit-cards/
+      category: points-and-miles
+    - rank: 12
+      name: Upgraded Points Credit Cards
+      domain: upgradedpoints.com
+      url: https://upgradedpoints.com/credit-cards/
+      category: points-and-miles
+    - rank: 13
+      name: Frequent Miler Credit Cards
+      domain: frequentmiler.com
+      url: https://frequentmiler.com/credit-cards/
+      category: points-and-miles
+    - rank: 14
+      name: Thrifty Traveler Credit Cards
+      domain: thriftytraveler.com
+      url: https://thriftytraveler.com/
+      category: points-and-miles
+    - rank: 15
+      name: AwardWallet Blog
+      domain: awardwallet.com
+      url: https://awardwallet.com/blog/
+      category: points-and-miles
+  domains:
+    - nerdwallet.com
+    - bankrate.com
+    - creditkarma.com
+    - cnbc.com
+    - investopedia.com
+    - wallethub.com
+    - lendingtree.com
+    - businessinsider.com
+    - thepointsguy.com
+    - doctorofcredit.com
+    - onemileatatime.com
+    - upgradedpoints.com
+    - frequentmiler.com
+    - thriftytraveler.com
+    - awardwallet.com
+
+disallowed_sources:
+  - reddit.com
+  - facebook.com
+  - instagram.com
+  - tiktok.com
+  - x.com
+  - youtube.com
+  - offer referral links
+  - targeted or mailed offers
+  - user-generated forums
+
+selection_rules:
+  - Prefer issuer pages for benefits, terms, and issuer-specific credits.
+  - Use the `sources` list above as the preferred top-20 secondary-source allowlist for current article and guide discovery.
+  - Prefer the strongest publicly available and clearly live offer among approved sources.
+  - Do not use a secondary source when the issuer page already resolves the fact cleanly unless validating a better public offer.
+  - When a source is stale or undated, lower confidence or omit the claim.
+
+fast_search_policy:
+  target_budget: 120s
+  phases:
+    - name: resolve
+      budget: 0-20s
+      action: Normalize card name, resolve exact variant using card-identity-rules.
+    - name: issuer_lookup
+      budget: 20-60s
+      action: Fetch issuer product page and key issuer terms/benefits pages.
+    - name: secondary_pass
+      budget: 60-110s
+      action: If needed, consult only the top 2-4 approved secondary sources relevant to the command. Stop early if issuer pages fully answer the contract.
+    - name: finalize
+      budget: 110-120s
+      action: Assemble compact output. If fields remain unresolved, mark them in confidence_notes rather than continuing to search.
+  command_source_ceilings:
+    card-rate:
+      issuer_first: true
+      max_secondary: 2
+    card-credits:
+      issuer_first: true
+      max_secondary: 2
+    card-transfer:
+      issuer_first: true
+      max_secondary: 2
+    card-full:
+      issuer_first: true
+      max_secondary: 4
+    card-news:
+      issuer_first: true
+      max_secondary: 4
+      notes: Broader secondary scan allowed but still capped.
+    card-compare:
+      issuer_first: true
+      max_secondary: 4
+      notes: Shared budget across both cards.
+    card-value:
+      issuer_first: true
+      max_secondary: 2
+    card-wallet:
+      issuer_first: true
+      max_secondary: 4
+      notes: Shared budget across all cards in the wallet.
+  stop_rules:
+    - Stop once all required contract fields are covered.
+    - Do not chase optional details after the contract is satisfied.
+    - Prefer a compact partially-resolved answer with clear uncertainty over an exhaustive search that exceeds the budget.
