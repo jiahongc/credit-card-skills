@@ -3,7 +3,7 @@ name: card-compare
 description: Return a side-by-side comparison of two major-US credit cards across fees, earning rates, credits, transfer partners, and key benefits. Use when the user is deciding between two cards.
 argument-hint: "[card A] vs [card B]"
 disable-model-invocation: true
-allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
+allowed-tools: Read, Bash(curl -sS *)
 ---
 
 # Card Compare
@@ -20,7 +20,11 @@ Fetch both issuer pages in parallel + up to 2 secondary sources total for curren
 
 1. Parse two card names from the input (separated by "vs", "versus", "or", or a comma).
 2. Resolve each card using [../card-identity/SKILL.md](../card-identity/SKILL.md). If either is ambiguous, return a numbered choice list for the ambiguous card and stop.
-3. In parallel: fetch both issuers' product pages AND search up to 2 secondary sources total (prefer NerdWallet, The Points Guy) for current welcome offers or details the issuer pages lack.
+3. Run one Brave Search API call per card covering issuer + secondary sources (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
+   ```
+   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_A+vs+CARD_B+compare&count=10" -H "X-Subscription-Token: $BRAVE_API_KEY"
+   ```
+   If `$BRAVE_API_KEY` is not set, fall back to WebSearch.
 4. Apply confidence handling from [../card-shared/confidence-rules.md](../card-shared/confidence-rules.md).
 5. Return compact markdown using the `card-compare` contract in [../card-shared/command-contracts.yaml](../card-shared/command-contracts.yaml).
 6. YAML is internal only — do not include it in user-facing output.

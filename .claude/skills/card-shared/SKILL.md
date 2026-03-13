@@ -2,7 +2,7 @@
 name: card-shared
 description: Shared research policy and output contracts for the card command suite (card-full, card-transfer, card-rate, card-news, card-credits, card-compare, card-value, card-wallet). Use as background reference, not as a user-facing command.
 user-invocable: false
-allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
+allowed-tools: Read, Bash(curl -sS *)
 ---
 
 # Card Shared

@@ -3,7 +3,7 @@ name: card-news
 description: Return material news about one major-US credit card from the last 3 months, including direct card changes, relevant issuer updates, and major approved-site coverage. Use when the user wants the latest card-specific developments.
 argument-hint: [card name]
 disable-model-invocation: true
-allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
+allowed-tools: Read, Bash(curl -sS *)
 ---
 
 # Card News
@@ -20,7 +20,11 @@ Fetch issuer newsroom + up to 2 secondary sources for recent coverage. Prefer Do
 
 1. Resolve the card using [../card-identity/SKILL.md](../card-identity/SKILL.md). If ambiguous, return a numbered choice list and stop.
 2. Apply the 3-month lookback and inclusion rules from [../card-shared/recency-rules.md](../card-shared/recency-rules.md).
-3. In parallel: fetch the issuer newsroom/product page AND search up to 2 secondary sources (prefer Doctor of Credit, The Points Guy) for recent card news.
+3. Run one Brave Search API call for recent news (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
+   ```
+   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+news+2026&count=10&freshness=pm" -H "X-Subscription-Token: $BRAVE_API_KEY"
+   ```
+   The `freshness=pm` parameter limits results to the past month. If `$BRAVE_API_KEY` is not set, fall back to WebSearch.
 4. Follow [../card-shared/confidence-rules.md](../card-shared/confidence-rules.md).
 5. Return compact markdown using the `card-news` contract in [../card-shared/command-contracts.yaml](../card-shared/command-contracts.yaml).
 6. YAML is internal only — do not include it in user-facing output.

@@ -2,7 +2,7 @@
 name: card-identity
 description: Resolve a card name to an exact issuer, family, and variant. This is a hidden shared skill used internally by all card commands as their first step. Not user-facing.
 user-invocable: false
-allowed-tools: Read, WebSearch, WebFetch, Bash(curl -sS *)
+allowed-tools: Read, Bash(curl -sS *)
 ---
 
 # Card Identity

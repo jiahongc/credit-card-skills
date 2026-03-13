@@ -109,21 +109,40 @@ selection_rules:
   - Do not use a secondary source when the issuer page already resolves the fact cleanly unless validating a better public offer.
   - When a source is stale or undated, lower confidence or omit the claim.
 
+search_method:
+  engine: brave-search-api
+  env_var: BRAVE_API_KEY
+  base_url: https://api.search.brave.com/res/v1/web/search
+  usage: |
+    Use Bash with curl instead of WebSearch/WebFetch. This is much faster (~1s vs 30-60s).
+
+    For knowledge-first commands (one issuer search):
+      curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_NAME+site:ISSUER_DOMAIN&count=5" \
+        -H "X-Subscription-Token: $BRAVE_API_KEY"
+
+    For search-required commands (issuer + secondary in one call):
+      curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_NAME+QUERY_TERMS&count=10" \
+        -H "X-Subscription-Token: $BRAVE_API_KEY"
+
+    Parse the JSON response — results are in .web.results[] with .title, .url, .description fields.
+    If BRAVE_API_KEY is not set, fall back to WebSearch.
+  notes:
+    - Always use site: filters to scope results to approved domains
+    - One API call can cover issuer + secondary sources together
+    - Free tier allows 2000 queries/month
+
 fast_search_policy:
-  target_budget: 120s
+  target_budget: 30s
   phases:
     - name: resolve
-      budget: 0-20s
+      budget: 0-5s
       action: Normalize card name, resolve exact variant using card-identity-rules.
-    - name: issuer_lookup
-      budget: 20-60s
-      action: Fetch issuer product page and key issuer terms/benefits pages.
-    - name: secondary_pass
-      budget: 60-110s
-      action: If needed, consult only the top 2-4 approved secondary sources relevant to the command. Stop early if issuer pages fully answer the contract.
+    - name: search
+      budget: 5-15s
+      action: One Brave API call with site filters for issuer (and secondary if search-required).
     - name: finalize
-      budget: 110-120s
-      action: Assemble compact output. If fields remain unresolved, mark them in confidence_notes rather than continuing to search.
+      budget: 15-30s
+      action: Assemble compact output from search snippets + training knowledge. Flag unresolved fields in confidence_notes.
   command_source_ceilings:
     card-rate:
       strategy: knowledge-first

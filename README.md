@@ -49,6 +49,19 @@ Skills load with a namespace: `/credit-card-skills:card-full`, etc.
 
 ---
 
+## Setup (Optional)
+
+For faster search results, set a [Brave Search API](https://brave.com/search/api/) key:
+
+```bash
+cp .env.example .env
+# Edit .env and add your BRAVE_API_KEY
+```
+
+Free tier gives 2,000 queries/month. Without it, commands fall back to built-in web search (slower).
+
+---
+
 ## Commands
 
 ### Single-card
@@ -167,11 +180,11 @@ and travel credits remain unchanged.
 
 ## How It Works
 
-- **Issuer-first**: always fetches the card's official product page before secondary sources
-- **Fast**: targets a ~2-minute research budget per command
+- **Issuer-first**: always checks the card's official product page before secondary sources
+- **Fast**: uses Brave Search API for ~1s lookups instead of slow page fetches; knowledge-first commands answer in seconds
 - **Compact**: emoji section headings, numbered lists, no prose padding
 - **Honest**: unresolved fields are flagged in confidence notes, never invented
-- **15 approved sources**: mainstream finance + points-and-miles specialists (see [`source-policy.yaml`](.claude/skills/card-shared/source-policy.yaml))
+- **6 curated sources**: NerdWallet, The Points Guy, Doctor of Credit, Bankrate, One Mile at a Time, Upgraded Points (see [`source-policy.yaml`](.claude/skills/card-shared/source-policy.yaml))
 
 ---
 
