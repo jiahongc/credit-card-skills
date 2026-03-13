@@ -80,6 +80,52 @@ When the match is the best-supported variant but not certain:
 | Spark Cash Plus | Capital One Spark Cash Plus |
 | Spark Miles | Capital One Spark Miles |
 | Venture X Business | Capital One Venture X Business Card |
+| Aviator Red | Barclays AAdvantage Aviator Red World Elite Mastercard |
+| Aviator Business | Barclays AAdvantage Aviator Business Mastercard |
+| JetBlue Card | Barclays JetBlue Card |
+| JetBlue Plus | Barclays JetBlue Plus Card |
+| JetBlue Business | Barclays JetBlue Business Card |
+| Wyndham Rewards | Barclays Wyndham Rewards Earner Card / Plus / Business (ambiguous — ask) |
+| Wyndham Plus | Barclays Wyndham Rewards Earner Plus Card |
+| Wyndham Business | Barclays Wyndham Rewards Earner Business Card |
+| Altitude Reserve | U.S. Bank Altitude Reserve Visa Infinite Card |
+| Altitude Connect | U.S. Bank Altitude Connect Visa Signature Card |
+| Altitude Go | U.S. Bank Altitude Go Visa Signature Card |
+| Marriott Bonvoy Boundless | Chase Marriott Bonvoy Boundless Credit Card |
+| Marriott Bonvoy Bold | Chase Marriott Bonvoy Bold Credit Card |
+| Marriott Bonvoy Bountiful | Chase Marriott Bonvoy Bountiful Card |
+| Marriott Bonvoy Brilliant | American Express Marriott Bonvoy Brilliant Card |
+| Marriott Bonvoy Business | American Express Marriott Bonvoy Business Card |
+| Hilton Honors Card | American Express Hilton Honors Card |
+| Hilton Surpass | American Express Hilton Honors Surpass Card |
+| Hilton Aspire | American Express Hilton Honors Aspire Card |
+| Hilton Business | American Express Hilton Honors Business Card |
+| IHG Premier | Chase IHG One Rewards Premier Credit Card |
+| IHG Traveler | Chase IHG One Rewards Traveler Credit Card |
+| IHG Business | Chase IHG One Rewards Premier Business Credit Card |
+| World of Hyatt | Chase World of Hyatt Credit Card |
+| Hyatt Business | Chase World of Hyatt Business Credit Card |
+| United Explorer | Chase United Explorer Card |
+| United Quest | Chase United Quest Card |
+| United Club Infinite | Chase United Club Infinite Card |
+| United Gateway | Chase United Gateway Card |
+| United Business | Chase United Business Card |
+| Southwest Priority | Chase Southwest Rapid Rewards Priority Credit Card |
+| Southwest Plus | Chase Southwest Rapid Rewards Plus Credit Card |
+| Southwest Premier | Chase Southwest Rapid Rewards Premier Credit Card |
+| Southwest Performance Business | Chase Southwest Rapid Rewards Performance Business Credit Card |
+| Southwest Premier Business | Chase Southwest Rapid Rewards Premier Business Credit Card |
+| Delta Gold | American Express Delta SkyMiles Gold Card |
+| Delta Platinum | American Express Delta SkyMiles Platinum Card |
+| Delta Reserve | American Express Delta SkyMiles Reserve Card |
+| Delta Biz Gold | American Express Delta SkyMiles Gold Business Card |
+| Delta Biz Plat | American Express Delta SkyMiles Platinum Business Card |
+| Delta Biz Reserve | American Express Delta SkyMiles Reserve Business Card |
+| Alaska Airlines | Bank of America Alaska Airlines Visa Signature Credit Card |
+| Alaska Airlines Business | Bank of America Alaska Airlines Visa Business Credit Card |
+| AAdvantage MileUp | Citi AAdvantage MileUp Card |
+| AAdvantage Platinum Select | Citi AAdvantage Platinum Select World Elite Mastercard |
+| AAdvantage Executive | Citi AAdvantage Executive World Elite Mastercard |
 
 ## Rules Reference
 
