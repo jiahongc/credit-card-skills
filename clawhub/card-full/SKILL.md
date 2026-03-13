@@ -110,7 +110,7 @@ Parse the JSON response — results are in `.web.results[]` with `.title`, `.url
 - **Stop early** once all required sections are covered.
 - **Disallowed**: Reddit, Facebook, Instagram, TikTok, X, YouTube, referral links, user forums.
 
-### Issuer Domains
+### Issuer Domains (for classifying results, not constraining searches)
 
 | Issuer | Domains |
 |---|---|

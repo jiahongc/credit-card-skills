@@ -28,7 +28,7 @@ The user provides a comma-separated list of card names:
 
 1. **Parse card list** from comma-separated input.
 2. **Resolve each card** — normalize and match to exact variants. If any card is ambiguous, return a numbered choice list for that card and stop.
-3. **Search** — run one Brave Search API call per card scoped to issuer domain. Run all calls in parallel. Do NOT search secondary sources.
+3. **Search** — run one Brave Search API call per card. Classify results as issuer or secondary by domain. Run all calls in parallel.
 4. **Collect** — for each card: annual fee, top earning categories, statement credits, key benefits.
 5. **Analyze** — identify overlapping earn categories, uncovered categories, redundant benefits, total fee burden.
 6. **Confidence** — flag uncertain claims.
@@ -82,16 +82,16 @@ Only shorthands and ambiguous names need entries here. Cards with full, unambigu
 
 American Express, Bank of America, Barclays, Bilt, Capital One, Chase, Citi, Discover, Robinhood, U.S. Bank, Wells Fargo.
 
-## Step 2: Search (Issuer Only, Per Card)
+## Step 2: Search (Per Card)
 
-For each card, run one call scoped to that issuer's domain:
+For each card, run one Brave Search API call:
 
 ```bash
-curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+site:ISSUER_DOMAIN&count=5" \
+curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+benefits+credits&count=10" \
   -H "X-Subscription-Token: $BRAVE_API_KEY"
 ```
 
-Run all calls in parallel. Optionally use 1 secondary source (prefer thepointsguy.com) for cross-checking.
+Run all calls in parallel. Classify results by domain: issuer pages (use Issuer Domains table below) vs approved secondary sources. Optionally use 1 secondary source (prefer thepointsguy.com) for cross-checking.
 
 ### Fetch Pages
 
@@ -103,7 +103,7 @@ curl -sS -L "URL" | sed 's/<[^>]*>//g' | tr -s '\n' | head -200
 
 Run fetches in parallel. Search snippets alone miss detailed credit and rate info. Combine fetched page content + search snippets + training knowledge.
 
-### Issuer Domains
+### Issuer Domains (for classifying results, not constraining searches)
 
 | Issuer | Domain |
 |---|---|

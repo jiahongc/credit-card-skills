@@ -22,8 +22,9 @@ When the user asks about a card's earning rates, rewards categories, multipliers
 ## Workflow
 
 1. **Resolve card identity** — normalize the input and match to one exact card variant.
-2. **Search issuer only** — run one Brave Search API call scoped to the issuer domain. Do NOT search secondary sources.
-3. **Compile** — combine search snippets with knowledge to fill all required sections.
+2. **Search** — run one Brave Search API call. Classify results as issuer or secondary by domain.
+3. **Fetch pages** — fetch the top issuer URL and top 1 secondary URL from results.
+4. **Compile** — combine fetched page content + search snippets + training knowledge.
 4. **Confidence** — flag uncertain or conflicting claims.
 
 ## Step 1: Card Identity Resolution
@@ -86,16 +87,16 @@ Both personal and business credit cards are supported. If the user specifies "bu
 
 American Express, Bank of America, Barclays, Bilt, Capital One, Chase, Citi, Discover, Robinhood, U.S. Bank, Wells Fargo.
 
-## Step 2: Search (Issuer Only)
-
-Run one Brave Search API call scoped to the issuer domain:
+## Step 2: Search
 
 ```bash
-curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+site:ISSUER_DOMAIN&count=5" \
+curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+earning+rates+categories&count=10" \
   -H "X-Subscription-Token: $BRAVE_API_KEY"
 ```
 
-### Issuer Domains
+Parse the JSON response — results are in `.web.results[]` with `.title`, `.url`, `.description` fields. Classify results by domain: issuer pages (use Issuer Domains table below) vs approved secondary sources. Use up to 1 secondary source (prefer bankrate.com, then thepointsguy.com) for merchant-coding caveats.
+
+### Issuer Domains (for classifying results, not constraining searches)
 
 | Issuer | Domain |
 |---|---|
@@ -110,8 +111,6 @@ curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+site:ISSUER
 | Robinhood | robinhood.com |
 | U.S. Bank | usbank.com |
 | Wells Fargo | wellsfargo.com |
-
-Use up to 1 secondary source (prefer bankrate.com, then thepointsguy.com) for merchant-coding caveats if needed.
 
 ## Step 3: Fetch Pages
 

@@ -20,9 +20,9 @@ Fetch both issuer pages in parallel + up to 5 secondary sources total for curren
 
 1. Parse two card names from the input (separated by "vs", "versus", "or", or a comma).
 2. Resolve each card using [../card-identity/SKILL.md](../card-identity/SKILL.md). If either is ambiguous, return a numbered choice list for the ambiguous card and stop.
-3. Run one Brave Search API call per card covering issuer + secondary sources (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
+3. Run one Brave Search API call (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
    ```
-   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_A+vs+CARD_B+compare&count=20" -H "X-Subscription-Token: $BRAVE_API_KEY"
+   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_A+vs+CARD_B+compare&count=10" -H "X-Subscription-Token: $BRAVE_API_KEY"
    ```
    If `$BRAVE_API_KEY` is not set, fall back to WebSearch.
 4. **Fetch pages** — pick the issuer URL for each card and up to 2 secondary URLs (prefer nerdwallet.com and thepointsguy.com) from the search results. Fetch in parallel:

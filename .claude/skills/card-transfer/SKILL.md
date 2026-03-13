@@ -19,9 +19,9 @@ Use training knowledge plus one issuer page fetch + one secondary source for cur
 ## Workflow
 
 1. Resolve the card using [../card-identity/SKILL.md](../card-identity/SKILL.md). If ambiguous, return a numbered choice list and stop.
-2. Run one Brave Search API call scoped to the issuer domain (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
+2. Run one Brave Search API call (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
    ```
-   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+transfer+partners+site:ISSUER_DOMAIN&count=5" -H "X-Subscription-Token: $BRAVE_API_KEY"
+   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+transfer+partners&count=10" -H "X-Subscription-Token: $BRAVE_API_KEY"
    ```
    If `$BRAVE_API_KEY` is not set, fall back to WebSearch.
 3. **Fetch pages** — pick the top issuer URL and top 1 secondary URL (prefer thepointsguy.com, then onemileatatime.com) from the search results. Fetch both in parallel:

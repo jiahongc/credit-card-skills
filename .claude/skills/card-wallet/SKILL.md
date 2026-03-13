@@ -26,7 +26,11 @@ Use training knowledge plus one issuer page fetch per card. Do NOT search second
 
 1. Parse the card list from the input (comma-separated).
 2. Resolve each card using [../card-identity/SKILL.md](../card-identity/SKILL.md). If any card is ambiguous, return a numbered choice list for that card and stop.
-3. For each card, run one Brave Search API call scoped to that issuer's domain (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)). Run all calls in parallel. Supplement with training knowledge.
+3. For each card, run one Brave Search API call (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
+   ```
+   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+benefits+credits&count=10" -H "X-Subscription-Token: $BRAVE_API_KEY"
+   ```
+   If `$BRAVE_API_KEY` is not set, fall back to WebSearch. Run all calls in parallel. Supplement with training knowledge.
 4. **Fetch pages** — for each card, fetch the top issuer URL from search results. Optionally fetch 1 secondary URL (prefer thepointsguy.com) for cross-checking:
    ```
    curl -sS -L "URL" | sed 's/<[^>]*>//g' | tr -s '\n' | head -200

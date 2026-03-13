@@ -132,19 +132,17 @@ search_method:
   usage: |
     Use Bash with curl instead of WebSearch/WebFetch. This is much faster (~1s vs 30-60s).
 
-    For knowledge-first commands (one issuer search):
-      curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_NAME+site:ISSUER_DOMAIN&count=5" \
-        -H "X-Subscription-Token: $BRAVE_API_KEY"
-
-    For search-required commands (issuer + secondary in one call):
-      curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_NAME+QUERY_TERMS&count=20" \
+    Search openly — do NOT use site: filters. Let the search engine find the best pages:
+      curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_NAME+QUERY_TERMS&count=10" \
         -H "X-Subscription-Token: $BRAVE_API_KEY"
 
     Parse the JSON response — results are in .web.results[] with .title, .url, .description fields.
+    Classify results by domain: issuer pages (use issuer_domains below) vs approved secondary sources.
     If BRAVE_API_KEY is not set, fall back to WebSearch.
   notes:
-    - Always use site: filters to scope results to approved domains
-    - One API call can cover issuer + secondary sources together
+    - Do NOT use site: filters — search openly and classify results after
+    - The issuer_domains table is for classifying results, not constraining searches
+    - One API call surfaces both issuer and secondary results naturally
     - Free tier allows 2000 queries/month
 
 fast_search_policy:
@@ -155,7 +153,7 @@ fast_search_policy:
       action: Normalize card name, resolve exact variant using card-identity-rules.
     - name: search
       budget: 5-10s
-      action: One Brave API call with site filters for issuer (and secondary if search-required).
+      action: One Brave API call — search openly, then classify results as issuer or secondary by domain.
     - name: fetch
       budget: 10-25s
       action: |

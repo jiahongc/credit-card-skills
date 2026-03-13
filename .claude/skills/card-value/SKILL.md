@@ -28,9 +28,9 @@ Fetch the issuer page + up to 5 secondary sources for current SUB details. Prefe
 ## Workflow
 
 1. Resolve the card using [../card-identity/SKILL.md](../card-identity/SKILL.md). If ambiguous, return a numbered choice list and stop.
-2. Run one Brave Search API call covering issuer + secondary sources (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
+2. Run one Brave Search API call (see `search_method` in [../card-shared/source-policy.yaml](../card-shared/source-policy.yaml)):
    ```
-   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+welcome+offer+annual+fee&count=20" -H "X-Subscription-Token: $BRAVE_API_KEY"
+   curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+welcome+offer+annual+fee+value&count=10" -H "X-Subscription-Token: $BRAVE_API_KEY"
    ```
    If `$BRAVE_API_KEY` is not set, fall back to WebSearch.
 3. **Fetch pages** — pick the top issuer URL and up to 2 secondary URLs (prefer nerdwallet.com and thepointsguy.com) from the search results. Fetch in parallel:
