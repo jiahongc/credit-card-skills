@@ -4,7 +4,7 @@
 
 **Credit Card Skills turns your AI coding agent into a credit card research analyst you can query on demand.**
 
-Eight specialized research skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [OpenAI Codex](https://developers.openai.com/codex), and [ClawHub](https://clawhub.com). Full card reports, earning rates, transfer partners, credits, news, comparisons, value estimates, and wallet audits — all as slash commands that return in ~2 minutes.
+Nine specialized research skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [OpenAI Codex](https://developers.openai.com/codex), and [ClawHub](https://clawhub.com). Full card reports, earning rates, transfer partners, credits, news, comparisons, value estimates, wallet audits, and portfolio recommendations with churning strategy — all as slash commands that return in ~2 minutes.
 
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4f46e5?style=flat-square)](https://agentskills.io)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97706?style=flat-square)](https://code.claude.com)
@@ -33,6 +33,7 @@ Eight specialized research skills for [Claude Code](https://docs.anthropic.com/e
 | `/card-compare` | Side-by-side comparison of two cards across every dimension |
 | `/card-value` | First-year value estimate: welcome bonus + earn + credits - annual fee |
 | `/card-wallet` | Wallet audit: earning map, credit stack, overlaps, gaps, and optimization |
+| `/card-profile-recommend` | Portfolio grading (MVP / Keep / Drop), 2–3 new card recommendations with churning strategy, issuer rules, and signup bonus sequencing |
 
 ## Demo: one card, five angles
 
@@ -468,6 +469,60 @@ This is where the real money is. Most people optimize individual cards but not t
 
 ---
 
+## `/card-profile-recommend`
+
+This is the **strategic advisor**.
+
+You know what you have — now you need to know what to do about it. `/card-profile-recommend` goes beyond the wallet audit: it grades every card in your portfolio (MVP / Keep / Consider Dropping), identifies cards that don't win a single earning category, recommends 2–3 new cards to add, checks issuer application rules (Chase 5/24, Amex lifetime bonus, Citi 8/65), sequences your applications for maximum signup bonus capture, and includes churning paths for cards worth opening even if you'll downgrade after year one.
+
+Provide opening dates and it calculates your exact 5/24 count and factors slot burn into drop/keep decisions.
+
+### Example
+
+```
+You:   /card-profile-recommend CSR (Feb 2026), Amex Gold (Nov 2020), CFU (Mar 2020),
+       Citi Custom Cash (Dec 2022), Amazon Prime (Sep 2015)
+
+Claude: ## 🃏 Cards Entered
+        1. Chase Sapphire Reserve — 02/2026
+        2. American Express Gold Card — 11/2020
+        3. Chase Freedom Unlimited — 03/2020
+        4. Citi Custom Cash Card — 12/2022
+        5. Amazon Prime Visa Signature Card — 09/2015
+
+        ## 📊 Portfolio Summary
+        5 cards | $1,120 gross fees | ~$1,464 credits | Net: -$344/yr
+        5/24: 1/24 (clear)
+
+        ## 🏅 Card Grades
+        MVP: Chase Sapphire Reserve, American Express Gold Card,
+             Chase Freedom Unlimited, Amazon Prime Visa
+        Keep: Citi Custom Cash Card (5% top category, but no TYP transfers)
+
+        ## 🗺️ Earning Map
+        | Category   | Best Card       | Rate | CPP  | Value   |
+        |------------|-----------------|------|------|---------|
+        | Dining     | Amex Gold       | 4x   | 2.0¢ | 8.0¢/$  |
+        | Groceries  | Amex Gold       | 4x   | 2.0¢ | 8.0¢/$  |
+        | Gas        | Custom Cash*    | 5%   | 1.0¢ | 5.0¢/$  |
+        | Everything | CFU             | 1.5x | 2.0¢ | 3.0¢/$  |
+
+        ## ➕ Recommended Additions
+        1. Citi Strata Premier (Top Pick) — unlocks TYP transfers,
+           existing Custom Cash jumps from 1.0¢ to 1.7¢
+           Churn path: apply → meet SUB → hold 12mo → downgrade
+           to Citi Strata Basic → re-apply after 48 months
+        2. ...
+
+        ## 🎯 Signup Bonus Strategy
+        1. Citi Strata Premier — apply first (not blocked by 5/24)
+        2. ...
+```
+
+The key insight: the Citi Custom Cash was earning at 1.0¢ because there was no transfer-enabling Citi card. Adding the Strata Premier doesn't just fill a gap — it upgrades an existing card's value by 70%.
+
+---
+
 ## How It Works
 
 - **Issuer-first**: always checks the card's official product page before secondary sources
@@ -492,6 +547,7 @@ This is where the real money is. Most people optimize individual cards but not t
 - [Card Full](https://clawhub.ai/jiahongc/card-full)
 - [Card Credits](https://clawhub.ai/jiahongc/card-credits)
 - [Card News](https://clawhub.ai/jiahongc/card-news)
+- [Card Profile Recommend](https://clawhub.ai/jiahongc/card-profile-recommend)
 
 ---
 
@@ -507,7 +563,7 @@ Major US card brands (personal and business): Amex, Bank of America, Barclays, B
 ./tests/run_all.sh
 ```
 
-Runs 12 fixture validations + composition check + cross-fixture consistency check. See [`tests/`](tests/) for golden, ambiguous, conflict, missing, and recency fixture sets.
+Runs fixture validations + composition check + cross-fixture consistency check. See [`tests/`](tests/) for golden, ambiguous, conflict, missing, and recency fixture sets.
 
 ---
 

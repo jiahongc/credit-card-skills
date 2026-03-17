@@ -206,6 +206,12 @@ fast_search_policy:
       max_secondary: 5
       parallel: true
       preferred: [nerdwallet.com, thepointsguy.com, bankrate.com, onemileatatime.com, doctorofcredit.com]
+    card-profile-recommend:
+      strategy: search-required
+      max_secondary: 5
+      parallel: true
+      notes: Per-card issuer page + 1 secondary. Additional parallel search for new-card candidates. 5 secondaries total across full run.
+      preferred: [nerdwallet.com, thepointsguy.com, doctorofcredit.com, onemileatatime.com, upgradedpoints.com]
   stop_rules:
     - Stop once all required contract fields are covered.
     - Do not chase optional details after the contract is satisfied.

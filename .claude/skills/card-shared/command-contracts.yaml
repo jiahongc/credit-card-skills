@@ -272,3 +272,40 @@ commands:
     object_keys:
       - earning_map
       - credits_stack
+  card-profile-recommend:
+    heading_prefix: "# "
+    sections:
+      - "## 🃏 Cards Entered"
+      - "## 📊 Portfolio Summary"
+      - "## 🏅 Card Grades"
+      - "## 🗺️ Earning Map"
+      - "## 🔻 Consider Dropping"
+      - "## 🕳️ Portfolio Gaps"
+      - "## ➕ Recommended Additions"
+      - "## 🎯 Signup Bonus Strategy"
+      - "## ⚖️ Issuer Rules Check"
+      - "## 🔍 Confidence Notes"
+      - "## 🔗 Sources"
+    required_top_level_keys:
+      - cards
+      - portfolio_economics
+      - earning_map
+      - gaps
+      - recommendations
+      - issuer_rules
+      - application_sequence
+      - sources
+      - confidence_notes
+    list_keys:
+      - cards
+      - gaps
+      - recommendations
+      - application_sequence
+      - sources
+      - confidence_notes
+    object_keys:
+      - portfolio_economics
+      - earning_map
+      - issuer_rules
+    optional_sections:
+      - "## 🔻 Consider Dropping"
