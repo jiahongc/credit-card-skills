@@ -30,6 +30,8 @@ commands:
       - "## ⚙️ Account Mechanics"
       - "## ✅ Eligibility"
       - "## 🧭 Strategy"
+      - "## 👤 Who Is This Card For?"
+      - "## 🃏 Similar Cards"
       - "## 📋 Confidence Notes"
       - "## 🔗 Sources"
     required_top_level_keys:
