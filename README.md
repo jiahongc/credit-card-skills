@@ -9,6 +9,7 @@ Nine specialized research skills for [Claude Code](https://docs.anthropic.com/en
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-4f46e5?style=flat-square)](https://agentskills.io)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-ready-D97706?style=flat-square)](https://code.claude.com)
 [![OpenAI Codex](https://img.shields.io/badge/OpenAI%20Codex-ready-10a37f?style=flat-square)](https://developers.openai.com/codex)
+[![skills.sh](https://img.shields.io/badge/skills.sh-install-4f46e5?style=flat-square)](https://skills.sh)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray?style=flat-square)](LICENSE)
 [![Version](https://img.shields.io/badge/version-2.0.0-blue?style=flat-square)](.claude-plugin/plugin.json)
 
@@ -103,7 +104,13 @@ This is not a chatbot. It is a research pipeline that hits live sources, cross-r
 
 **Requirements:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Git](https://git-scm.com/). Works with any agent that supports the [Agent Skills](https://agentskills.io) standard.
 
-Run from your project root — auto-detects your agent:
+**Quickest — via [skills.sh](https://skills.sh):**
+
+```bash
+npx skills add jiahongc/credit-card-skills
+```
+
+**Or run the install script** from your project root — auto-detects your agent:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/jiahongc/credit-card-skills/main/install.sh)
