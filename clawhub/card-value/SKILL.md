@@ -31,9 +31,11 @@ Default moderate-spender profile (if none given): $500/mo dining, $200/mo travel
 
 1. **Resolve card identity** — normalize and match to one exact variant. If ambiguous, return a numbered choice list and stop.
 2. **Search** — run one Brave Search API call for current welcome offer and fee details.
-3. **Research** — collect annual fee, welcome offer (bonus + spend requirement), earning rates by category, and statement credits.
-4. **Compute** — `first_year_value = welcome_bonus_value + annual_earn_value + total_credits - annual_fee`.
-5. **Confidence** — flag uncertain claims. Use 1 cpp baseline unless a known portal/transfer premium exists.
+3. **Fetch pages** — fetch the issuer and approved secondary pages before deciding whether another search is needed.
+4. **Pace any follow-up searches** — if another Brave search is needed, wait briefly instead of bursting requests.
+5. **Research** — collect annual fee, welcome offer (bonus + spend requirement), earning rates by category, and statement credits.
+6. **Compute** — `first_year_value = welcome_bonus_value + annual_earn_value + total_credits - annual_fee`.
+7. **Confidence** — flag uncertain claims. Use 1 cpp baseline unless a known portal/transfer premium exists.
 
 ## Step 1: Card Identity Resolution
 
@@ -90,6 +92,16 @@ American Express, Bank of America, Barclays, Bilt, Capital One, Chase, Citi, Dis
 curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+welcome+offer+annual+fee&count=20" \
   -H "X-Subscription-Token: $BRAVE_API_KEY"
 ```
+
+### Search Budget Rule
+
+Brave may rate-limit after only a few closely spaced requests. Treat search as scarce and paced.
+
+- Start with one search.
+- Fetch the issuer and approved secondary pages before deciding whether any additional search is needed.
+- If an extra search is needed, wait about **2 to 5 seconds** first.
+- If Brave returns **429**, wait about **8 to 15 seconds** and retry once.
+- If it still fails, continue with the best evidence already gathered and note the limitation in `## 📋 Confidence Notes`.
 
 ### Source Policy
 

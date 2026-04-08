@@ -33,9 +33,10 @@ When opening dates are provided, calculate exact 5/24 count and factor into grad
 
 1. **Parse card list** from comma-separated input.
 2. **Resolve each card** — normalize and match to exact variants. If any card is ambiguous, return a numbered choice list for that card and stop.
-3. **Search** — run one Brave Search API call per card + gap category searches in parallel. Classify results as issuer or secondary by domain.
+3. **Search** — run one Brave Search API call per card plus any needed gap-category searches, but do not burst them blindly.
 4. **Fetch pages** — for each card, fetch the top issuer URL + 1 secondary (prefer thepointsguy.com). For new-card candidates, fetch up to 2 secondary pages.
-5. **Collect** — for each card: annual fee, statement credits (with conditions), earning categories with rates, welcome offer status, notable benefits.
+5. **Pace any follow-up searches** — if more Brave searches are needed, serialize them with short waits rather than firing them all at once.
+6. **Collect** — for each card: annual fee, statement credits (with conditions), earning categories with rates, welcome offer status, notable benefits.
 6. **Portfolio economics** — compute total gross fees, total claimable credits, net annual cost. Per-card net cost.
 7. **Grade each card** — MVP / Keep / Consider Dropping per grading criteria below.
 8. **Point valuations** — determine effective cpp for each currency using TPG valuations + transfer-access rule.
@@ -79,7 +80,19 @@ curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+benefits+cr
   -H "X-Subscription-Token: $BRAVE_API_KEY"
 ```
 
-Run all calls in parallel. Additionally, search for new-card candidates targeting gap categories.
+Do not assume Brave tolerates a large burst of parallel searches.
+
+### Search Budget Rule
+
+Brave may rate-limit after only a few closely spaced requests. Treat search as scarce and paced.
+
+- Start with the most important cards first.
+- Fetch issuer and approved secondary pages before deciding whether more searches are needed.
+- When multiple searches are required, serialize them in small batches or add short waits of about **2 to 5 seconds** between bursts.
+- If Brave returns **429**, wait about **8 to 15 seconds** and retry once for the still-missing search.
+- If it still fails, continue with the best evidence already gathered and note the limitation in `## 🔍 Confidence Notes`.
+
+Additionally, search for new-card candidates targeting gap categories.
 
 ### Fetch Pages
 

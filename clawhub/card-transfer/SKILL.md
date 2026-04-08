@@ -24,8 +24,9 @@ When the user asks about a card's transfer partners, point transfers, or airline
 1. **Resolve card identity** — normalize the input and match to one exact card variant.
 2. **Search** — run one Brave Search API call. Classify results as issuer or secondary by domain.
 3. **Fetch pages** — fetch the top issuer URL and top 1 secondary URL from results.
-4. **Compile** — combine fetched page content + search snippets + training knowledge.
-4. **Confidence** — flag uncertain or conflicting claims.
+4. **Pace any follow-up searches** — if another Brave search is needed, wait briefly instead of bursting requests.
+5. **Compile** — combine fetched page content + search snippets + training knowledge.
+6. **Confidence** — flag uncertain or conflicting claims.
 
 ## Step 1: Card Identity Resolution
 
@@ -95,6 +96,16 @@ curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+transfer+pa
 ```
 
 Parse the JSON response — results are in `.web.results[]` with `.title`, `.url`, `.description` fields. Classify results by domain: issuer pages (use Issuer Domains table below) vs approved secondary sources. Use up to 1 secondary source (prefer thepointsguy.com, then onemileatatime.com) for current transfer ratios.
+
+### Search Budget Rule
+
+Brave may rate-limit after only a few closely spaced requests. Treat search as scarce and paced.
+
+- Start with one search.
+- Fetch the issuer and approved secondary pages before deciding whether any additional search is needed.
+- If an extra search is needed, wait about **2 to 5 seconds** first.
+- If Brave returns **429**, wait about **8 to 15 seconds** and retry once.
+- If it still fails, continue with the best evidence already gathered and note the limitation in `## 📋 Confidence Notes`.
 
 ## Step 3: Fetch Pages
 

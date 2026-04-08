@@ -28,10 +28,12 @@ The user provides a comma-separated list of card names:
 
 1. **Parse card list** from comma-separated input.
 2. **Resolve each card** — normalize and match to exact variants. If any card is ambiguous, return a numbered choice list for that card and stop.
-3. **Search** — run one Brave Search API call per card. Classify results as issuer or secondary by domain. Run all calls in parallel.
-4. **Collect** — for each card: annual fee, top earning categories, statement credits, key benefits.
-5. **Analyze** — identify overlapping earn categories, uncovered categories, redundant benefits, total fee burden.
-6. **Confidence** — flag uncertain claims.
+3. **Search** — run one Brave Search API call per card. Classify results as issuer or secondary by domain.
+4. **Fetch pages** — fetch issuer and approved secondary pages before deciding whether more searches are needed.
+5. **Pace batch searches** — when multiple cards require Brave searches, serialize or batch them gently instead of firing a large burst.
+6. **Collect** — for each card: annual fee, top earning categories, statement credits, key benefits.
+7. **Analyze** — identify overlapping earn categories, uncovered categories, redundant benefits, total fee burden.
+8. **Confidence** — flag uncertain claims.
 
 ## Step 1: Card Identity Resolution
 
@@ -91,7 +93,19 @@ curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+benefits+cr
   -H "X-Subscription-Token: $BRAVE_API_KEY"
 ```
 
-Run all calls in parallel. Classify results by domain: issuer pages (use Issuer Domains table below) vs approved secondary sources. Optionally use 1 secondary source (prefer thepointsguy.com) for cross-checking.
+Do not assume Brave tolerates a large burst of parallel searches.
+
+### Search Budget Rule
+
+Brave may rate-limit after only a few closely spaced requests. Treat search as scarce and paced.
+
+- Start with the most important cards first.
+- Fetch issuer and approved secondary pages before deciding whether more searches are needed.
+- When multiple cards require searches, serialize them in small batches or add short waits of about **2 to 5 seconds** between bursts.
+- If Brave returns **429**, wait about **8 to 15 seconds** and retry once for the still-missing search.
+- If it still fails, continue with the best evidence already gathered and note the limitation in `## 📋 Confidence Notes`.
+
+Classify results by domain: issuer pages (use Issuer Domains table below) vs approved secondary sources. Optionally use 1 secondary source (prefer thepointsguy.com) for cross-checking.
 
 ### Fetch Pages
 

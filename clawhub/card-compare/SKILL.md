@@ -30,8 +30,10 @@ The user provides two card names separated by "vs", "versus", "or", or a comma:
 1. **Parse two card names** from the input.
 2. **Resolve each card** — normalize and match to exact variants. If either is ambiguous, return a numbered choice list for that card and stop.
 3. **Search** — run one Brave Search API call for comparison data.
-4. **Compile** — assemble side-by-side report.
-5. **Confidence** — flag uncertain or conflicting claims.
+4. **Fetch pages** — fetch issuer and approved secondary pages after the search completes.
+5. **Pace any follow-up searches** — if another Brave search is needed, wait briefly instead of bursting requests.
+6. **Compile** — assemble side-by-side report.
+7. **Confidence** — flag uncertain or conflicting claims.
 
 ## Step 1: Card Identity Resolution
 
@@ -90,6 +92,16 @@ Run one Brave Search API call:
 curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD_A+vs+CARD_B+compare&count=20" \
   -H "X-Subscription-Token: $BRAVE_API_KEY"
 ```
+
+### Search Budget Rule
+
+Brave may rate-limit after only a few closely spaced requests. Treat search as scarce and paced.
+
+- Start with one search.
+- Fetch the issuer and approved secondary pages before deciding whether any additional search is needed.
+- If an extra search is needed, wait about **2 to 5 seconds** first.
+- If Brave returns **429**, wait about **8 to 15 seconds** and retry once.
+- If it still fails, continue with the best evidence already gathered and note the limitation in `## 📋 Confidence Notes`.
 
 ### Source Policy
 
