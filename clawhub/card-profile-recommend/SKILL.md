@@ -2,7 +2,6 @@
 name: card-profile-recommend
 description: Analyze a multi-card portfolio — grade each card (MVP / Keep / Consider Dropping), recommend 2–3 new additions with churning strategy, apply issuer rules (Chase 5/24, Amex lifetime bonus, Citi 8/65), and sequence applications to maximize signup bonuses. Covers 11 major US issuers including co-branded hotel and airline cards.
 allowed-tools:
-  - Read
   - WebSearch
   - WebFetch
   - AskUserQuestion
@@ -13,7 +12,6 @@ metadata:
         - BRAVE_API_KEY
       optionalBins:
         - curl
-    primaryEnv: BRAVE_API_KEY
 ---
 
 # Card Profile Recommend
@@ -104,11 +102,19 @@ Additionally, search for new-card candidates targeting gap categories.
 
 ### Fetch Pages
 
-For each card, fetch the top issuer URL + 1 secondary:
+For each card, fetch the top issuer URL + 1 secondary with `WebFetch`.
 
-```bash
-curl -sS -L "URL" | sed 's/<[^>]*>//g' | tr -s '\n' | head -200
-```
+An approved secondary page means a URL whose hostname matches an approved secondary domain used by this skill, such as `thepointsguy.com` for card cross-checks. Do not fetch or cite secondary pages from any other domain.
+
+### URL Safety Rules
+
+- Prefer `WebFetch` for page retrieval. Use `curl` only for the optional Brave Search API calls above, not for arbitrary result URLs.
+- Never execute a shell command that interpolates a raw URL taken directly from search results.
+- Only fetch URLs when all of the following are true:
+  1. scheme is `https`
+  2. hostname matches a supported issuer domain or an approved secondary domain from this skill
+  3. the URL is being passed to `WebFetch`, not inserted into a shell pipeline
+- If a result URL fails those checks, skip it and use the next valid result.
 
 ### Issuer Domains (for classifying results)
 

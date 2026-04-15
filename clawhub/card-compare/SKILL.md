@@ -2,7 +2,6 @@
 name: card-compare
 description: Side-by-side comparison of two major-US credit cards across fees, earning rates, credits, transfer partners, and key benefits. Covers 11 major US issuers including co-branded hotel and airline cards.
 allowed-tools:
-  - Read
   - WebSearch
   - WebFetch
   - AskUserQuestion
@@ -13,7 +12,6 @@ metadata:
         - BRAVE_API_KEY
       optionalBins:
         - curl
-    primaryEnv: BRAVE_API_KEY
 ---
 
 # Card Compare
@@ -119,11 +117,19 @@ Treat search as scarce and paced. Built-in web search is the default path; if Br
 
 ## Step 4: Fetch Pages
 
-Pick the issuer URL for each card and up to 2 secondary URLs (prefer nerdwallet.com and thepointsguy.com) from the search results. Fetch in parallel:
+Pick the issuer URL for each card and up to 2 secondary URLs (prefer nerdwallet.com and thepointsguy.com) from the search results. Fetch in parallel with `WebFetch`.
 
-```bash
-curl -sS -L "URL" | sed 's/<[^>]*>//g' | tr -s '\n' | head -200
-```
+An approved secondary page means a URL whose hostname matches one of the approved secondary domains named in this skill. Do not fetch or cite secondary pages from any other domain.
+
+### URL Safety Rules
+
+- Prefer `WebFetch` for page retrieval. Use `curl` only for the optional Brave Search API calls above, not for arbitrary result URLs.
+- Never execute a shell command that interpolates a raw URL taken directly from search results.
+- Only fetch URLs when all of the following are true:
+  1. scheme is `https`
+  2. hostname matches a supported issuer domain or an approved secondary domain from this skill
+  3. the URL is being passed to `WebFetch`, not inserted into a shell pipeline
+- If a result URL fails those checks, skip it and use the next valid result.
 
 Search snippets are too shallow for accurate comparisons — the actual pages have complete rate tables, credit lists, and benefit details.
 

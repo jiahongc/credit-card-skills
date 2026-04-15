@@ -2,7 +2,6 @@
 name: card-wallet
 description: Audit a multi-card wallet — earning map, credit stack, overlaps, gaps, and total annual cost. Evaluates a user's full card lineup. Covers 11 major US issuers including co-branded hotel and airline cards.
 allowed-tools:
-  - Read
   - WebSearch
   - WebFetch
   - AskUserQuestion
@@ -13,7 +12,6 @@ metadata:
         - BRAVE_API_KEY
       optionalBins:
         - curl
-    primaryEnv: BRAVE_API_KEY
 ---
 
 # Card Wallet
@@ -117,11 +115,19 @@ Classify results by domain: issuer pages (use Issuer Domains table below) vs app
 
 ### Fetch Pages
 
-For each card, fetch the top issuer URL from search results. Optionally fetch 1 secondary URL:
+For each card, fetch the top issuer URL from search results. Optionally fetch 1 secondary URL with `WebFetch`.
 
-```bash
-curl -sS -L "URL" | sed 's/<[^>]*>//g' | tr -s '\n' | head -200
-```
+An approved secondary page means a URL whose hostname matches the preferred secondary domains named in this skill. Do not fetch or cite secondary pages from any other domain.
+
+### URL Safety Rules
+
+- Prefer `WebFetch` for page retrieval. Use `curl` only for the optional Brave Search API calls above, not for arbitrary result URLs.
+- Never execute a shell command that interpolates a raw URL taken directly from search results.
+- Only fetch URLs when all of the following are true:
+  1. scheme is `https`
+  2. hostname matches a supported issuer domain or an approved secondary domain from this skill
+  3. the URL is being passed to `WebFetch`, not inserted into a shell pipeline
+- If a result URL fails those checks, skip it and use the next valid result.
 
 Run fetches in parallel. Search snippets alone miss detailed credit and rate info. Combine fetched page content + search snippets + training knowledge.
 
