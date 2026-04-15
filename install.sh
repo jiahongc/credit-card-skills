@@ -81,14 +81,21 @@ case "$MODE" in
 esac
 
 # ── Done ──────────────────────────────────────────────────────────────────────
+commands=(
+  "/card-full [card]              full card report"
+  "/card-rate [card]              earning rates"
+  "/card-transfer [card]          transfer partners"
+  "/card-credits [card]           statement credits"
+  "/card-news [card]              recent news (last 3 months)"
+  "/card-compare [card] vs [card] side-by-side comparison"
+  "/card-value [card]             first-year value estimate"
+  "/card-wallet [card], [card]... wallet audit"
+  "/card-profile-recommend [...] keep/drop/add recommendations"
+)
+
 echo
 echo "  ${bold}Commands ready:${reset}"
-echo "    /card-full [card]              full card report"
-echo "    /card-rate [card]              earning rates"
-echo "    /card-transfer [card]          transfer partners"
-echo "    /card-credits [card]           statement credits"
-echo "    /card-news [card]              recent news (last 3 months)"
-echo "    /card-compare [card] vs [card] side-by-side comparison"
-echo "    /card-value [card]             first-year value estimate"
-echo "    /card-wallet [card], [card]... wallet audit"
+for command in "${commands[@]}"; do
+  echo "    $command"
+done
 echo
