@@ -533,7 +533,7 @@ The key insight: the Citi Custom Cash was earning at 1.0¢ because there was no 
 ## How It Works
 
 - **Issuer-first**: always checks the card's official product page before secondary sources
-- **Fast**: uses Brave Search API for ~1s lookups instead of slow page fetches; knowledge-first commands answer in seconds
+- **Fast**: can use Brave Search API for ~1s lookups when configured; otherwise falls back to built-in web search
 - **Deep**: search-required commands pull up to 5 secondary sources; knowledge-first commands use 1 secondary for cross-checks
 - **Compact**: emoji section headings, numbered lists, no prose padding
 - **Honest**: unresolved fields are flagged in confidence notes, never invented

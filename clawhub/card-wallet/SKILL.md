@@ -1,12 +1,17 @@
 ---
 name: card-wallet
 description: Audit a multi-card wallet — earning map, credit stack, overlaps, gaps, and total annual cost. Evaluates a user's full card lineup. Covers 11 major US issuers including co-branded hotel and airline cards.
+allowed-tools:
+  - Read
+  - WebSearch
+  - WebFetch
+  - AskUserQuestion
 metadata:
   openclaw:
     requires:
-      env:
+      optionalEnv:
         - BRAVE_API_KEY
-      bins:
+      optionalBins:
         - curl
     primaryEnv: BRAVE_API_KEY
 ---
@@ -28,9 +33,9 @@ The user provides a comma-separated list of card names:
 
 1. **Parse card list** from comma-separated input.
 2. **Resolve each card** — normalize and match to exact variants. If any card is ambiguous, return a numbered choice list for that card and stop.
-3. **Search** — run one Brave Search API call per card. Classify results as issuer or secondary by domain.
+3. **Search** — use `WebSearch` by default per card. If `BRAVE_API_KEY` is available and `curl` exists, you may use one Brave Search API call per card instead. Classify results as issuer or secondary by domain.
 4. **Fetch pages** — fetch issuer and approved secondary pages before deciding whether more searches are needed.
-5. **Pace batch searches** — when multiple cards require Brave searches, serialize or batch them gently instead of firing a large burst.
+5. **Pace batch searches** — when multiple cards require searches, serialize or batch them gently instead of firing a large burst.
 6. **Collect** — for each card: annual fee, top earning categories, statement credits, key benefits.
 7. **Analyze** — identify overlapping earn categories, uncovered categories, redundant benefits, total fee burden.
 8. **Confidence** — flag uncertain claims.
@@ -86,23 +91,26 @@ American Express, Bank of America, Barclays, Bilt, Capital One, Chase, Citi, Dis
 
 ## Step 2: Search (Per Card)
 
-For each card, run one Brave Search API call:
+Use the platform's **WebSearch** and **WebFetch** tools by default. If `BRAVE_API_KEY` is available and the runtime also provides `curl`, you may use Brave Search API instead for faster and more repeatable search results.
+
+Optional Brave template:
 
 ```bash
 curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+benefits+credits&count=10" \
   -H "X-Subscription-Token: $BRAVE_API_KEY"
 ```
 
-Do not assume Brave tolerates a large burst of parallel searches.
+Do not assume any search provider tolerates a large burst of parallel searches.
 
 ### Search Budget Rule
 
-Brave may rate-limit after only a few closely spaced requests. Treat search as scarce and paced.
+Treat search as scarce and paced. Built-in web search is the default path; if Brave mode is used, it may rate-limit after only a few closely spaced requests.
 
 - Start with the most important cards first.
 - Fetch issuer and approved secondary pages before deciding whether more searches are needed.
 - When multiple cards require searches, serialize them in small batches or add short waits of about **2 to 5 seconds** between bursts.
 - If Brave returns **429**, wait about **8 to 15 seconds** and retry once for the still-missing search.
+- If Brave is unavailable, continue with `WebSearch` + `WebFetch`.
 - If it still fails, continue with the best evidence already gathered and note the limitation in `## 📋 Confidence Notes`.
 
 Classify results by domain: issuer pages (use Issuer Domains table below) vs approved secondary sources. Optionally use 1 secondary source (prefer thepointsguy.com) for cross-checking.

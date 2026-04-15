@@ -1,12 +1,17 @@
 ---
 name: card-credits
 description: Return statement credits and cash-like credits for one major-US credit card — amount, cadence, trigger rules, enrollment requirements, and restrictions. Covers 11 major US issuers including co-branded hotel and airline cards.
+allowed-tools:
+  - Read
+  - WebSearch
+  - WebFetch
+  - AskUserQuestion
 metadata:
   openclaw:
     requires:
-      env:
+      optionalEnv:
         - BRAVE_API_KEY
-      bins:
+      optionalBins:
         - curl
     primaryEnv: BRAVE_API_KEY
 ---
@@ -28,9 +33,9 @@ When the user asks about a card's statement credits, annual credits, or cash-bac
 ## Workflow
 
 1. **Resolve card identity** — normalize the input and match to one exact card variant.
-2. **Search** — run one Brave Search API call. Classify results as issuer or secondary by domain.
-3. **Fetch pages** — fetch the top issuer URL and top 1 secondary URL from results.
-4. **Pace any follow-up searches** — if another Brave search is needed, wait briefly instead of bursting requests.
+2. **Search** — use `WebSearch` by default. If `BRAVE_API_KEY` is available and `curl` exists, you may use one Brave Search API call instead. Classify results as issuer or secondary by domain.
+3. **Fetch pages** — use `WebFetch` by default to fetch the top issuer URL and top 1 secondary URL from results.
+4. **Pace any follow-up searches** — if another search is needed, wait briefly instead of bursting requests.
 5. **Compile** — combine fetched page content + search snippets + training knowledge.
 6. **Confidence** — flag uncertain or conflicting claims.
 
@@ -96,6 +101,10 @@ American Express, Bank of America, Barclays, Bilt, Capital One, Chase, Citi, Dis
 
 ## Step 2: Search
 
+Use the platform's **WebSearch** and **WebFetch** tools by default. If `BRAVE_API_KEY` is available and the runtime also provides `curl`, you may use Brave Search API instead for faster and more repeatable search results.
+
+Optional Brave template:
+
 ```bash
 curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+credits+benefits&count=10" \
   -H "X-Subscription-Token: $BRAVE_API_KEY"
@@ -105,12 +114,13 @@ Parse the JSON response — results are in `.web.results[]` with `.title`, `.url
 
 ### Search Budget Rule
 
-Brave may rate-limit after only a few closely spaced requests. Treat search as scarce and paced.
+Treat search as scarce and paced. Built-in web search is the default path; if Brave mode is used, it may rate-limit after only a few closely spaced requests.
 
 - Start with one search.
 - Fetch the issuer and approved secondary pages before deciding whether any additional search is needed.
 - If an extra search is needed, wait about **2 to 5 seconds** first.
 - If Brave returns **429**, wait about **8 to 15 seconds** and retry once.
+- If Brave is unavailable, continue with `WebSearch` + `WebFetch`.
 - If it still fails, continue with the best evidence already gathered and note the limitation in `## 📋 Confidence Notes`.
 
 ## Step 3: Fetch Pages

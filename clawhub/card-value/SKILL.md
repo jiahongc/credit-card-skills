@@ -1,12 +1,17 @@
 ---
 name: card-value
 description: Estimate first-year value for one major-US credit card — welcome bonus + annual earn + credits minus annual fee. Accepts an optional spending breakdown. Covers 11 major US issuers including co-branded hotel and airline cards.
+allowed-tools:
+  - Read
+  - WebSearch
+  - WebFetch
+  - AskUserQuestion
 metadata:
   openclaw:
     requires:
-      env:
+      optionalEnv:
         - BRAVE_API_KEY
-      bins:
+      optionalBins:
         - curl
     primaryEnv: BRAVE_API_KEY
 ---
@@ -30,9 +35,9 @@ Default moderate-spender profile (if none given): $500/mo dining, $200/mo travel
 ## Workflow
 
 1. **Resolve card identity** — normalize and match to one exact variant. If ambiguous, return a numbered choice list and stop.
-2. **Search** — run one Brave Search API call for current welcome offer and fee details.
-3. **Fetch pages** — fetch the issuer and approved secondary pages before deciding whether another search is needed.
-4. **Pace any follow-up searches** — if another Brave search is needed, wait briefly instead of bursting requests.
+2. **Search** — use `WebSearch` by default for current welcome offer and fee details. If `BRAVE_API_KEY` is available and `curl` exists, you may use one Brave Search API call instead.
+3. **Fetch pages** — use `WebFetch` by default to fetch the issuer and approved secondary pages before deciding whether another search is needed.
+4. **Pace any follow-up searches** — if another search is needed, wait briefly instead of bursting requests.
 5. **Research** — collect annual fee, welcome offer (bonus + spend requirement), earning rates by category, and statement credits.
 6. **Compute** — `first_year_value = welcome_bonus_value + annual_earn_value + total_credits - annual_fee`.
 7. **Confidence** — flag uncertain claims. Use 1 cpp baseline unless a known portal/transfer premium exists.
@@ -88,6 +93,10 @@ American Express, Bank of America, Barclays, Bilt, Capital One, Chase, Citi, Dis
 
 ## Step 2: Search
 
+Use the platform's **WebSearch** and **WebFetch** tools by default. If `BRAVE_API_KEY` is available and the runtime also provides `curl`, you may use Brave Search API instead for faster and more repeatable search results.
+
+Optional Brave template:
+
 ```bash
 curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+welcome+offer+annual+fee&count=20" \
   -H "X-Subscription-Token: $BRAVE_API_KEY"
@@ -95,12 +104,13 @@ curl -sS "https://api.search.brave.com/res/v1/web/search?q=CARD+NAME+welcome+off
 
 ### Search Budget Rule
 
-Brave may rate-limit after only a few closely spaced requests. Treat search as scarce and paced.
+Treat search as scarce and paced. Built-in web search is the default path; if Brave mode is used, it may rate-limit after only a few closely spaced requests.
 
 - Start with one search.
 - Fetch the issuer and approved secondary pages before deciding whether any additional search is needed.
 - If an extra search is needed, wait about **2 to 5 seconds** first.
 - If Brave returns **429**, wait about **8 to 15 seconds** and retry once.
+- If Brave is unavailable, continue with `WebSearch` + `WebFetch`.
 - If it still fails, continue with the best evidence already gathered and note the limitation in `## 📋 Confidence Notes`.
 
 ### Source Policy
